@@ -1,0 +1,23 @@
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// import routes
+const tradeRoutes = require("./routes/trades");
+
+app.use("/api/trades", tradeRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Trading Journal API running 🚀");
+});
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
+
+
+
