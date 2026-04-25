@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api/trades";
+const BASE_URL = "https://trading-journal-api-mksj.onrender.com/api/trades";
 
 export const getTrades = async () => {
   try {
