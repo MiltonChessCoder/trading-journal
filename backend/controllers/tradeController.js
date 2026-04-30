@@ -3,7 +3,7 @@ const Trade = require("../models/Trade");
 // GET all trades
 exports.getTrades = async (req, res) => {
   try {
-    const trades = await Trade.find().sort({ createdAt: -1 });
+    const trades = await Trade.find({ user: req.userId }).sort({ createdAt: -1 });
     res.json(trades);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch trades" });
@@ -12,6 +12,7 @@ exports.getTrades = async (req, res) => {
 
 // CREATE trade
 exports.createTrade = async (req, res) => {
+  req.body.user = req.userId;
   try {
     const { asset, entryPrice, exitPrice, quantity, type } = req.body;
 
@@ -27,16 +28,25 @@ exports.createTrade = async (req, res) => {
       profitLoss = (entryPrice - exitPrice) * quantity;
     }
 
-    const trade = new Trade({
+    // const trade = new Trade({
+    //   asset,
+    //   entryPrice,
+    //   exitPrice,
+    //   quantity,
+    //   type,
+    //   profitLoss
+    // });
+
+    // await trade.save();
+    const trade = await Trade.create({
+      
       asset,
+      type,
       entryPrice,
       exitPrice,
       quantity,
-      type,
-      profitLoss
+      user: req.userId  
     });
-
-    await trade.save();
 
     res.json(trade);
   } catch (err) {
